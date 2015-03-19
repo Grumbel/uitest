@@ -14,44 +14,42 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <uitest/uitest.hpp>
-#include <stdexcept>
+#ifndef HEADER_UITEST_ARG_INFO_HPP
+#define HEADER_UITEST_ARG_INFO_HPP
+
+#include <string>
+#include <vector>
 
 namespace uitesting {
 
-std::vector<std::unique_ptr<TestInfo> >& g_tests()
+class ArgInfo
 {
-  static std::vector<std::unique_ptr<TestInfo> > s_tests;
-  return s_tests;
-}
+public:
+  static ArgInfo from_string(const std::string& text);
 
-TestInfo*
-register_test(const std::string& _class, const std::string& _func,
-              const std::function<std::unique_ptr<UITest> ()>& factory,
-              const std::string& args_str, const std::string& doc)
-{
-  ArgInfo args = ArgInfo::from_string(args_str);
+public:
+  ArgInfo(const std::string& args_str, int num_required, int num_optional, int rest);
 
-  g_tests().push_back(
-    std::unique_ptr<TestInfo>(
-      new TestInfo{_class + "." + _func, _class, _func, args, doc, factory}));
+  bool parse_args(const std::vector<std::string>& args,
+                  std::vector<std::string>& args_out, std::vector<std::string>& rest_out) const;
 
-  return g_tests().back().get();
-}
+  int required() const { return m_num_required; }
+  int optional() const { return m_num_optional; }
+  int rest() const { return m_rest;}
 
-TestInfo*
-find_testcase(const std::string& testcase)
-{
-  for(const auto& testinfo : g_tests())
-  {
-    if (testinfo->m_name == testcase)
-    {
-      return testinfo.get();
-    }
-  }
-  return nullptr;
-}
+  std::string str() const { return m_args_str; }
+
+private:
+  std::string m_args_str;
+  int m_num_required;
+  int m_num_optional;
+
+  // 0: no rest arguments, 1: optional rest arguments, 2: at least one rest argument
+  int m_rest;
+};
 
 } // namespace uitesting
+
+#endif
 
 /* EOF */
