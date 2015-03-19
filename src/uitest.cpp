@@ -35,8 +35,6 @@ register_test(const std::string& _class, const std::string& _func,
     std::unique_ptr<TestInfo>(
       new TestInfo{_class + "." + _func, _class, _func, args_str, args, doc, factory}));
 
-  std::cout << "reg " << _class << "." << _func << ": " << &g_tests() << " " << g_tests().back().get() << " " << g_tests().size() << std::endl;
-
   return g_tests().back().get();
 }
 
@@ -45,7 +43,6 @@ find_testcase(const std::string& testcase)
 {
   for(const auto& testinfo : g_tests())
   {
-    std::cout << "* " << testinfo->m_name << std::endl;
     if (testinfo->m_name == testcase)
     {
       return testinfo.get();

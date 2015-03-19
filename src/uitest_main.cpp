@@ -20,18 +20,11 @@ int main(int argc, char** argv)
 {
   if (argc < 2)
   {
-    std::cout << uitesting::g_tests().size() << ": " << &uitesting::g_tests() << std::endl;
+    std::cout << "Usage: " << argv[0] << " TESTCASE [ARG]...\n"
+              << "\nTest Cases:\n";
     for(const auto& testinfo : ::uitesting::g_tests())
     {
-      if (testinfo == ::uitesting::g_tests().front())
-      {
-        std::cout << "Usage: " << argv[0] << " ";
-      }
-      else
-      {
-        std::cout << "       " << argv[0] << " ";
-      }
-      std::cout << testinfo->m_class << "." << testinfo->m_function << " " << testinfo->m_args_str << std::endl;
+      std::cout << "  " << testinfo->m_class << "." << testinfo->m_function << " " << testinfo->m_args_str << std::endl;
     }
     return 0;
   }
