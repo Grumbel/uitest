@@ -16,6 +16,7 @@
 
 #include <uitest/uitest.hpp>
 #include <iostream>
+#include <stdexcept>
 
 UITEST(ExampleTest, download, "URL",
        "Try to download the given URL")
@@ -37,6 +38,12 @@ UITEST(ExampleTest, arg_cat, "ARG1 ARG2",
   std::string arg1 = args[0];
   std::string arg2 = args[1];
   std::cout << "Result: " << arg1 + arg2 << std::endl;
+}
+
+UITEST(ExampleTest, throw_exception, "MESSAGE",
+       "Throw exception with MESSAGE")
+{
+  throw std::runtime_error(args[0]);
 }
 
 /* EOF */
