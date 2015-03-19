@@ -18,28 +18,32 @@
 
 namespace uitesting {
 
-std::vector<std::unique_ptr<TestInfo> > g_tests;
+std::vector<std::unique_ptr<TestInfo> >& g_tests()
+{
+  static std::vector<std::unique_ptr<TestInfo> > s_tests;
+  return s_tests;
+}
 
 TestInfo*
 register_test(const std::string& _class, const std::string& _func,
-                         const std::function<std::unique_ptr<UITest> ()>& factory,
-                         const std::string& args_str, const std::string& doc)
+              const std::function<std::unique_ptr<UITest> ()>& factory,
+              const std::string& args_str, const std::string& doc)
 {
   boost::tokenizer<> tok(args_str);
   std::vector<std::string> args(std::begin(tok), std::end(tok));
-  g_tests.push_back(
+  g_tests().push_back(
     std::unique_ptr<TestInfo>(
       new TestInfo{_class + "." + _func, _class, _func, args_str, args, doc, factory}));
 
-  std::cout << "reg " << _class << "." << _func << ": " << &g_tests << " " << g_tests.back().get() << " " << g_tests.size() << std::endl;
+  std::cout << "reg " << _class << "." << _func << ": " << &g_tests() << " " << g_tests().back().get() << " " << g_tests().size() << std::endl;
 
-  return g_tests.back().get();
+  return g_tests().back().get();
 }
 
 TestInfo*
 find_testcase(const std::string& testcase)
 {
-  for(const auto& testinfo : g_tests)
+  for(const auto& testinfo : g_tests())
   {
     std::cout << "* " << testinfo->m_name << std::endl;
     if (testinfo->m_name == testcase)

@@ -20,10 +20,10 @@ int main(int argc, char** argv)
 {
   if (argc < 2)
   {
-    std::cout << uitesting::g_tests.size() << ": " << &uitesting::g_tests << std::endl;
-    for(const auto& testinfo : ::uitesting::g_tests)
+    std::cout << uitesting::g_tests().size() << ": " << &uitesting::g_tests() << std::endl;
+    for(const auto& testinfo : ::uitesting::g_tests())
     {
-      if (testinfo == ::uitesting::g_tests.front())
+      if (testinfo == ::uitesting::g_tests().front())
       {
         std::cout << "Usage: " << argv[0] << " ";
       }

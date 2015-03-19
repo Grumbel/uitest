@@ -30,7 +30,7 @@ class UITest
 {
 public:
   UITest() {}
-  ~UITest() {}
+  virtual ~UITest() {}
   virtual void TestBody(const std::vector<std::string>& args) = 0;
 };
 
@@ -46,7 +46,7 @@ public:
   std::function<std::unique_ptr<UITest> ()> m_factory;
 };
 
-extern std::vector<std::unique_ptr<TestInfo> > g_tests;
+std::vector<std::unique_ptr<TestInfo> >& g_tests();
 
 TestInfo*
 register_test(const std::string& _class, const std::string& _func,
