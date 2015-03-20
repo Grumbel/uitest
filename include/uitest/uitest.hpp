@@ -77,6 +77,31 @@ find_testcase(const std::string& testcase);
   void _class##_##_func::TestBody(const std::vector<std::string>& args, \
                                   const std::vector<std::string>& rest)
 
+#define UITEST_S(_class, _func, _arg, _doc)                             \
+  class _class##_##_func : public ::uitesting::UITest                   \
+  {                                                                     \
+  public:                                                               \
+    static ::uitesting::TestInfo* const info __attribute__ ((unused));  \
+    void TestBody(const std::vector<std::string>& args,                 \
+                  const std::vector<std::string>& rest) override        \
+    {                                                                   \
+      for(const auto& arg : rest)                                       \
+      {                                                                 \
+        TestBodySimple(arg);                                            \
+      }                                                                 \
+    }                                                                   \
+    void TestBodySimple(const std::string& arg);                        \
+  };                                                                    \
+  ::uitesting::TestInfo* const _class##_##_func::info                   \
+  = ::uitesting::register_test(                                         \
+    #_class, #_func,                                                    \
+    []() {                                                              \
+    return std::make_unique<_class##_##_func>();                        \
+    },                                                                  \
+    _arg "...",                                                         \
+    _doc);                                                              \
+  void _class##_##_func::TestBodySimple(const std::string& arg)
+
 #endif
 
 /* EOF */

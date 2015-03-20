@@ -32,11 +32,16 @@ UITEST(ExampleTest, download, "HOST URL...",
   }
 }
 
-UITEST(ExampleTest, other_test, "FILE",
-       "Try to download the given URL")
+UITEST_S(ExampleTest, other_test, "FILE",
+         "Try to download the given URL")
 {
-  std::string file = args[0];
-  std::cout << "Running a test on FILE: " << file << std::endl;
+  std::cout << "Running a test on FILE: " << arg << std::endl;
+}
+
+UITEST_S(ExampleTest, multi_arg_test, "TEXT",
+         "Print the given TEXT")
+{
+  std::cout << "TEXT: " << arg << std::endl;
 }
 
 UITEST(ExampleTest, arg_cat, "ARG1 ARG2",
