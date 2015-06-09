@@ -19,31 +19,48 @@ project(uitest)
 
 find_package(Threads)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y -Wall -Wextra -Wshadow -Wno-unused-parameter")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y")
 
-# build gtest
-add_library(gtest STATIC external/googletest/src/gtest-all.cc)
-target_include_directories(gtest PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external/googletest/)
+if(WARNINGS)
+  set(WARNING_CXX_FLAGS -Wall -Wextra -Wshadow -Wno-unused-parameter)
+endif()
 
-add_library(gtest_main STATIC external/googletest/src/gtest_main.cc)
-target_include_directories(gtest_main PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external/googletest/)
+if(WERROR)
+  set(WARNING_CXX_FLAGS -Werror)
+endif()
 
 # build uitest
 add_library(uitest STATIC src/arg_info.cpp src/uitest.cpp)
+target_compile_options(uitest PRIVATE ${WARNINGS_CXX_FLAGS})
 target_include_directories(uitest PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 add_library(uitest_main STATIC src/uitest_main.cpp)
+target_compile_options(uitest_main PRIVATE ${WARNINGS_CXX_FLAGS})
 target_include_directories(uitest_main PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # build examples
-add_executable(example_test examples/examples.cpp)
-target_link_libraries(example_test LINK_PUBLIC uitest uitest_main)
-target_include_directories(example_test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+if(BUILD_EXAMPLES)
+  add_executable(example_test examples/examples.cpp)
+  target_compile_options(example_test PRIVATE ${WARNINGS_CXX_FLAGS})
+  target_link_libraries(example_test LINK_PUBLIC uitest uitest_main)
+  target_include_directories(example_test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+endif()
 
-# build tests
-add_executable(uitest_test test/arg_info_test.cpp)
-target_include_directories(uitest_test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_include_directories(uitest_test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external/googletest/)
-target_link_libraries(uitest_test LINK_PUBLIC uitest gtest gtest_main ${CMAKE_THREAD_LIBS_INIT})
+if(BUILD_TESTS)
+  # build gtest
+  add_library(gtest STATIC external/googletest/src/gtest-all.cc)
+  target_include_directories(gtest PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external/googletest)
+  target_include_directories(gtest PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external/googletest/include)
+
+  add_library(gtest_main STATIC external/googletest/src/gtest_main.cc)
+  target_include_directories(gtest_main PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external/googletest/include)
+
+  # build tests
+  add_executable(uitest_test test/arg_info_test.cpp)
+  target_compile_options(uitest_test PRIVATE ${WARNINGS_CXX_FLAGS})
+  target_include_directories(uitest_test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+  target_include_directories(uitest_test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external/googletest/)
+  target_link_libraries(uitest_test LINK_PUBLIC uitest gtest gtest_main ${CMAKE_THREAD_LIBS_INIT})
+endif()
 
 # EOF #
