@@ -17,7 +17,6 @@
 #ifndef HEADER_UITEST_HPP
 #define HEADER_UITEST_HPP
 
-#include <boost/tokenizer.hpp>
 #include <functional>
 #include <iostream>
 #include <memory>
