@@ -19,7 +19,7 @@ project(uitest)
 
 find_package(Threads)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -Wall -Wextra -Wshadow -Wno-unused-parameter")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y -Wall -Wextra -Wshadow -Wno-unused-parameter")
 
 # build gtest
 add_library(gtest STATIC external/googletest/src/gtest-all.cc)
