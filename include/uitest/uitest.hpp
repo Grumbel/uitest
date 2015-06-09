@@ -71,7 +71,7 @@ find_testcase(const std::string& testcase);
   ::uitesting::TestInfo* const _class##_##_func::info                   \
   = ::uitesting::register_test(#_class, #_func,                         \
                   []() {                                                \
-                    return std::make_unique<_class##_##_func>();        \
+                    return std::unique_ptr<_class##_##_func>(new _class##_##_func); \
                   },                                                    \
                   __VA_ARGS__);                                         \
   void _class##_##_func::TestBody(const std::vector<std::string>& args, \
@@ -96,7 +96,7 @@ find_testcase(const std::string& testcase);
   = ::uitesting::register_test(                                         \
     #_class, #_func,                                                    \
     []() {                                                              \
-    return std::make_unique<_class##_##_func>();                        \
+        return std::unique_ptr<_class##_##_func>(new _class##_##_func); \
     },                                                                  \
     _arg "...",                                                         \
     _doc);                                                              \
