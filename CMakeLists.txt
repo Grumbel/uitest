@@ -56,11 +56,11 @@ if(BUILD_TESTS)
   target_include_directories(gtest_main PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external/googletest/include)
 
   # build tests
-  add_executable(uitest_test test/arg_info_test.cpp)
-  target_compile_options(uitest_test PRIVATE ${WARNINGS_CXX_FLAGS})
-  target_include_directories(uitest_test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-  target_include_directories(uitest_test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external/googletest/)
-  target_link_libraries(uitest_test LINK_PUBLIC uitest gtest gtest_main ${CMAKE_THREAD_LIBS_INIT})
+  add_executable(test_uitest test/arg_info_test.cpp)
+  target_compile_options(test_uitest PRIVATE ${WARNINGS_CXX_FLAGS})
+  target_include_directories(test_uitest PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+  target_include_directories(test_uitest PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external/googletest/)
+  target_link_libraries(test_uitest LINK_PUBLIC uitest gtest gtest_main ${CMAKE_THREAD_LIBS_INIT})
 endif()
 
 # EOF #
