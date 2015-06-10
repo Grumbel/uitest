@@ -29,9 +29,9 @@ TEST(ArgInfoTest, from_string)
 
   {
     auto args = uitesting::ArgInfo::from_string("URL...");
-    EXPECT_EQ(1, args.required());
+    EXPECT_EQ(0, args.required());
     EXPECT_EQ(0, args.optional());
-    EXPECT_EQ(0, args.rest());
+    EXPECT_EQ(2, args.rest());
   }
 
   {
