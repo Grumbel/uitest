@@ -18,15 +18,16 @@ Usage
 
 UITest comes in the form of a simple macro:
 
-    UITEST(class, method, args, docstring)
+    UITEST(class, method, args="", docstring="")
     {
       ...
     }
 
-`class` and `method` form the name of the test case, while `docstring`
-provides a description. `args` is a special string that gets
-interpreted by UITest and is used to parse `argv[]`, it's similar to
-the regular `Usage:` strings found in many programs `--help` output.
+`class` and `method` are strings that form the name of the test case,
+while `docstring` provides a description. `args` is a special string
+that gets interpreted by UITest and is used to parse `argv[]`, it's
+similar to the regular `Usage:` strings found in many programs
+`--help` output.
 
 A `args` string of the form `"FILE"` means the program expects a single
 argument. `"FILE..."` would indicate the program multiple arguments,

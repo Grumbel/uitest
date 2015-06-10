@@ -59,7 +59,23 @@ find_testcase(const std::string& testcase);
 
 } // namespace uitesting
 
-#define UITEST(_class, _func, ...)                                      \
+// Some macro magic to make _arg and _doc argument optional, see:
+// http://stackoverflow.com/a/3048361/28113
+#define UITEST(...) UITEST_MACRO_CHOOSER(__VA_ARGS__)(__VA_ARGS__)
+
+#define UITEST_GET_5TH_ARG(arg1, arg2, arg3, arg4, arg5, ...) arg5
+
+#define UITEST_MACRO_CHOOSER(...)                                       \
+  UITEST_GET_5TH_ARG(__VA_ARGS__,                                       \
+                     UITEST_4_ARGS,                                     \
+                     UITEST_3_ARGS,                                     \
+                     UITEST_2_ARGS)
+
+#define UITEST_2_ARGS(_class, _func) UITEST_4_ARGS(_class, _func, "", "")
+
+#define UITEST_3_ARGS(_class, _func, _arg) UITEST_4_ARGS(_class, _func, _arg, "")
+
+#define UITEST_4_ARGS(_class, _func, _arg, _doc)                        \
   class _class##_##_func : public ::uitesting::UITest                   \
   {                                                                     \
   public:                                                               \
@@ -68,15 +84,29 @@ find_testcase(const std::string& testcase);
                   const std::vector<std::string>& rest) override;       \
   };                                                                    \
   ::uitesting::TestInfo* const _class##_##_func::info                   \
-  = ::uitesting::register_test(#_class, #_func,                         \
-                  []() {                                                \
-                    return std::unique_ptr<_class##_##_func>(new _class##_##_func); \
-                  },                                                    \
-                  __VA_ARGS__);                                         \
+  = ::uitesting::register_test(                                         \
+    #_class, #_func,                                                    \
+    []() {                                                              \
+    return std::unique_ptr<_class##_##_func>(new _class##_##_func);     \
+    },                                                                  \
+    _arg, _doc);                                                        \
   void _class##_##_func::TestBody(const std::vector<std::string>& args, \
                                   const std::vector<std::string>& rest)
 
-#define UITEST_S(_class, _func, _arg, _doc)                             \
+// Some macro magic to make _arg and _doc argument optional, see:
+// http://stackoverflow.com/a/3048361/28113
+#define UITEST_S(...) UITEST_S_MACRO_CHOOSER(__VA_ARGS__)(__VA_ARGS__)
+
+#define UITEST_S_GET_5TH_ARG(arg1, arg2, arg3, arg4, arg5, ...) arg5
+
+#define UITEST_S_MACRO_CHOOSER(...)                                     \
+  UITEST_S_GET_5TH_ARG(__VA_ARGS__,                                     \
+                       UITEST_S_4_ARGS,                                 \
+                       UITEST_S_3_ARGS)
+
+#define UITEST_S_3_ARGS(_class, _func, _arg) UITEST_S_4_ARGS(_class, _func, _arg, "")
+
+#define UITEST_S_4_ARGS(_class, _func, _arg, _doc)                      \
   class _class##_##_func : public ::uitesting::UITest                   \
   {                                                                     \
   public:                                                               \

@@ -18,6 +18,16 @@
 #include <iostream>
 #include <stdexcept>
 
+UITEST(ExampleTest, optional_args)
+{
+  std::cout << "TEXT: " << std::endl;
+}
+
+UITEST_S(ExampleTest, optional_args_s, "FILE")
+{
+  std::cout << "TEXT:" << arg << std::endl;
+}
+
 UITEST(ExampleTest, download, "HOST URL...",
        "Try to download the given URLs")
 {
