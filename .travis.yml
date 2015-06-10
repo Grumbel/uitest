@@ -66,5 +66,6 @@ script:
   - cd "build-$BUILD_TYPE"
   - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_EXAMPLES=ON -DBUILD_TESTS=ON -DWARNINGS=ON -DWERROR=ON
   - make VERBOSE=1 -j3
+  - ./test_uitest
 
 # EOF #
