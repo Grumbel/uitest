@@ -79,11 +79,11 @@ find_testcase(const std::string& testcase);
   class _class##_##_func : public ::uitesting::UITest                   \
   {                                                                     \
   public:                                                               \
-    static ::uitesting::TestInfo* const info __attribute__ ((unused));  \
+    static ::uitesting::TestInfo* const s_uitest_info __attribute__ ((unused));  \
     void TestBody(const std::vector<std::string>& args,                 \
                   const std::vector<std::string>& rest) override;       \
   };                                                                    \
-  ::uitesting::TestInfo* const _class##_##_func::info                   \
+  ::uitesting::TestInfo* const _class##_##_func::s_uitest_info          \
   = ::uitesting::register_test(                                         \
     #_class, #_func,                                                    \
     []() {                                                              \
@@ -110,7 +110,7 @@ find_testcase(const std::string& testcase);
   class _class##_##_func : public ::uitesting::UITest                   \
   {                                                                     \
   public:                                                               \
-    static ::uitesting::TestInfo* const info __attribute__ ((unused));  \
+    static ::uitesting::TestInfo* const s_uitest_info __attribute__ ((unused));  \
     void TestBody(const std::vector<std::string>& args,                 \
                   const std::vector<std::string>& rest) override        \
     {                                                                   \
@@ -121,7 +121,7 @@ find_testcase(const std::string& testcase);
     }                                                                   \
     void TestBodySimple(const std::string& arg);                        \
   };                                                                    \
-  ::uitesting::TestInfo* const _class##_##_func::info                   \
+  ::uitesting::TestInfo* const _class##_##_func::s_uitest_info          \
   = ::uitesting::register_test(                                         \
     #_class, #_func,                                                    \
     []() {                                                              \
