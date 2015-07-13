@@ -69,7 +69,10 @@ find_testcase(const std::string& testcase);
   UITEST_GET_5TH_ARG(__VA_ARGS__,                                       \
                      UITEST_4_ARGS,                                     \
                      UITEST_3_ARGS,                                     \
-                     UITEST_2_ARGS)
+                     UITEST_2_ARGS,                                     \
+                     UITEST_1_ARGS)
+
+#define UITEST_1_ARGS
 
 #define UITEST_2_ARGS(_class, _func) UITEST_4_ARGS(_class, _func, "", "")
 
@@ -102,7 +105,10 @@ find_testcase(const std::string& testcase);
 #define UITEST_S_MACRO_CHOOSER(...)                                     \
   UITEST_S_GET_5TH_ARG(__VA_ARGS__,                                     \
                        UITEST_S_4_ARGS,                                 \
-                       UITEST_S_3_ARGS)
+                       UITEST_S_3_ARGS,                                 \
+                       UITEST_S_2_ARGS)
+
+#define UITEST_S_2_ARGS
 
 #define UITEST_S_3_ARGS(_class, _func, _arg) UITEST_S_4_ARGS(_class, _func, _arg, "")
 
