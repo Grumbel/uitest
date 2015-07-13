@@ -22,11 +22,13 @@ find_package(Threads)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y")
 
 if(WARNINGS)
-  set(WARNING_CXX_FLAGS -Wall -Wextra -Wshadow -Wno-unused-parameter)
+  set(WARNINGS_CXX_FLAGS ${WARNINGS_CXX_FLAGS}
+    -pedantic -Wall -Wextra -Wno-c++0x-compat -Wnon-virtual-dtor -Weffc++
+    -Wconversion -Wshadow -Wcast-qual -Winit-self -Wno-unused-parameter -Wunreachable-code)
 endif()
 
 if(WERROR)
-  set(WARNING_CXX_FLAGS -Werror)
+  set(WARNINGS_CXX_FLAGS ${WARNINGS_CXX_FLAGS} -Werror)
 endif()
 
 # build uitest
