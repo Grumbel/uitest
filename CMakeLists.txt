@@ -51,17 +51,16 @@ endif()
 if(BUILD_TESTS)
   # build gtest
   add_library(gtest STATIC external/googletest/src/gtest-all.cc)
-  target_include_directories(gtest PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external/googletest)
-  target_include_directories(gtest PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external/googletest/include)
+  target_include_directories(gtest SYSTEM PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external/googletest)
+  target_include_directories(gtest SYSTEM PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external/googletest/include)
 
   add_library(gtest_main STATIC external/googletest/src/gtest_main.cc)
-  target_include_directories(gtest_main PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external/googletest/include)
+  target_include_directories(gtest_main SYSTEM PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external/googletest/include)
 
   # build tests
   add_executable(test_uitest test/arg_info_test.cpp)
   target_compile_options(test_uitest PRIVATE ${WARNINGS_CXX_FLAGS})
   target_include_directories(test_uitest PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-  target_include_directories(test_uitest PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external/googletest/)
   target_link_libraries(test_uitest LINK_PUBLIC uitest gtest gtest_main ${CMAKE_THREAD_LIBS_INIT})
 endif()
 
