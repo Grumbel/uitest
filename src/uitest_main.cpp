@@ -48,8 +48,11 @@ int main(int argc, char** argv)
       {
         std::cerr << "error: incorrect number of arguments\n\n"
                   << "Usage: " << argv[0] << " " << testinfo->m_name
-                  << " " << testinfo->m_args.str() << '\n'
-                  << "  " << testinfo->m_doc << std::endl;
+                  << " " << testinfo->m_args.str() << std::endl;
+        if (!testinfo->m_doc.empty())
+        {
+          std::cerr << "  " << testinfo->m_doc << std::endl;
+        }
       }
       else
       {
