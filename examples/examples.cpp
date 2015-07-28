@@ -16,6 +16,7 @@
 
 #include <uitest/uitest.hpp>
 #include <iostream>
+#include <exception>
 #include <stdexcept>
 
 UITEST(ExampleTest, optional_args)
@@ -26,6 +27,18 @@ UITEST(ExampleTest, optional_args)
 UITEST_S(ExampleTest, optional_args_s, "FILE")
 {
   std::cout << "TEXT:" << arg << std::endl;
+}
+
+UITEST(ExampleTest, exception, "MESSAGE")
+{
+  try
+  {
+    throw std::runtime_error(args[0]);
+  }
+  catch(...)
+  {
+    std::throw_with_nested(std::runtime_error("expected failure"));
+  }
 }
 
 UITEST(ExampleTest, download, "HOST URL...",

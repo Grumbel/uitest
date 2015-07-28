@@ -16,6 +16,27 @@
 
 #include <uitest/uitest.hpp>
 
+namespace {
+
+void print_exception(std::exception const& err, int level = 0)
+{
+  std::cerr << std::string(static_cast<size_t>(level * 2), ' ') << "exception: " << err.what() << std::endl;
+  try
+  {
+    std::rethrow_if_nested(err);
+  }
+  catch(std::exception const& nested_err)
+  {
+    print_exception(nested_err, level + 1);
+  }
+  catch(...)
+  {
+    std::cerr << "unknown exception\n";
+  }
+}
+
+} // namespace
+
 int main(int argc, char** argv)
 {
   if (argc < 2)
@@ -56,7 +77,20 @@ int main(int argc, char** argv)
       }
       else
       {
+        try
+        {
         testobj->TestBody(args, rest);
+        }
+        catch(std::exception const& err)
+        {
+          std::cerr << "uitest " << testcase << " failed with:\n";
+          print_exception(err);
+        }
+        catch(...)
+        {
+          std::cerr << "uitest " << testcase << " failed with:\n";
+          std::cerr << "unknown exception\n";
+        }
       }
       return 0;
     }
