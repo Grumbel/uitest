@@ -124,12 +124,12 @@ ArgInfo::parse_args(const std::vector<std::string>& raw_args,
   {
     if (m_rest == 1)
     {
-      size_t i = 0;
-      for(; i < raw_args.size() && i < static_cast<size_t>(m_num_required + m_num_optional); ++i)
+      int i = 0;
+      for(; i < static_cast<int>(raw_args.size()) && i < m_num_required + m_num_optional; ++i)
       {
         args_out.push_back(raw_args[i]);
       }
-      for(; i < raw_args.size(); ++i)
+      for(; i < static_cast<int>(raw_args.size()); ++i)
       {
         rest_out.push_back(raw_args[i]);
       }
@@ -137,8 +137,8 @@ ArgInfo::parse_args(const std::vector<std::string>& raw_args,
     }
     else if (m_rest == 2)
     {
-      size_t i = 0;
-      for(; i < raw_args.size() && i < static_cast<size_t>(m_num_required + m_num_optional); ++i)
+      int i = 0;
+      for(; i < static_cast<int>(raw_args.size()) && i < m_num_required + m_num_optional; ++i)
       {
         args_out.push_back(raw_args[i]);
       }
