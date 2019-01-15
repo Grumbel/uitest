@@ -24,7 +24,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y")
 if(WARNINGS)
   set(WARNINGS_CXX_FLAGS ${WARNINGS_CXX_FLAGS}
     -pedantic -Wall -Wextra -Wno-c++0x-compat -Wnon-virtual-dtor -Weffc++
-    -Wconversion -Wshadow -Wcast-qual -Winit-self -Wno-unused-parameter -Wunreachable-code)
+    -Wconversion -Wshadow -Wcast-qual -Winit-self -Wno-unused-parameter -Wunreachable-code -Wno-sign-conversion)
 endif()
 
 if(WERROR)
