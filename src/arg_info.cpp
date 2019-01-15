@@ -142,7 +142,7 @@ ArgInfo::parse_args(const std::vector<std::string>& raw_args,
       {
         args_out.push_back(raw_args[i]);
       }
-      for(; i < raw_args.size(); ++i)
+      for(; i < static_cast<int>(raw_args.size()); ++i)
       {
         rest_out.push_back(raw_args[i]);
       }
