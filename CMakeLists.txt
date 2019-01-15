@@ -62,6 +62,12 @@ if(BUILD_TESTS)
   target_compile_options(test_uitest PRIVATE ${WARNINGS_CXX_FLAGS})
   target_include_directories(test_uitest PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
   target_link_libraries(test_uitest LINK_PUBLIC uitest gtest gtest_main ${CMAKE_THREAD_LIBS_INIT})
+
+  # add 'make test' target, use 'make test ARGS="-V"' or 'ctest -V' for verbose
+  enable_testing()
+  add_test(NAME test_uitest
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    COMMAND test_uitest)
 endif()
 
 # EOF #
