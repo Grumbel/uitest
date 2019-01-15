@@ -40,6 +40,23 @@ add_library(uitest_main STATIC src/uitest_main.cpp)
 target_compile_options(uitest_main PRIVATE ${WARNINGS_CXX_FLAGS})
 target_include_directories(uitest_main PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
+if(CMAKE_VERSION VERSION_GREATER 3.6)
+  if (USE_CLANG_TIDY)
+    find_program(
+      CLANG_TIDY_EXE
+      NAMES "clang-tidy"
+      DOC "Path to clang-tidy executable"
+      )
+
+    if(NOT CLANG_TIDY_EXE)
+      message(FATAL_ERROR "clang-tidy not found.")
+    else()
+      message(STATUS "clang-tidy found: ${CLANG_TIDY_EXE}")
+      set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXE}")
+    endif()
+  endif()
+endif()
+
 # build examples
 if(BUILD_EXAMPLES)
   add_executable(example_test examples/examples.cpp)
@@ -53,9 +70,11 @@ if(BUILD_TESTS)
   add_library(gtest STATIC external/googletest/src/gtest-all.cc)
   target_include_directories(gtest SYSTEM PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external/googletest)
   target_include_directories(gtest SYSTEM PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external/googletest/include)
+  set_target_properties(gtest PROPERTIES CXX_CLANG_TIDY "")
 
   add_library(gtest_main STATIC external/googletest/src/gtest_main.cc)
   target_include_directories(gtest_main SYSTEM PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external/googletest/include)
+  set_target_properties(gtest_main PROPERTIES CXX_CLANG_TIDY "")
 
   # build tests
   add_executable(test_uitest test/arg_info_test.cpp)
