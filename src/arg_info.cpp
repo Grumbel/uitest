@@ -16,7 +16,6 @@
 
 #include <uitest/arg_info.hpp>
 
-#include <boost/tokenizer.hpp>
 
 namespace uitesting {
 
@@ -54,14 +53,30 @@ int has_ellipsis(const std::string& text)
   }
 }
 
+std::vector<std::string> string_tokenize(std::string const& text, char delimiter)
+{
+  std::vector<std::string> result;
+
+  for(std::string::size_type i = 0; i != text.size();)
+  {
+    while(text[i] == delimiter && i != text.size()) { ++i; };
+    const std::string::size_type start = i;
+    while(text[i] != delimiter && i != text.size()) { ++i; };
+    const std::string::size_type end = i;
+    if (start != end) {
+      result.emplace_back(text.substr(start, end - start));
+    }
+  }
+
+  return result;
+}
+
 } // namespace
 
 ArgInfo
 ArgInfo::from_string(const std::string& args_str)
 {
-  boost::char_separator<char> sep(" ");
-  boost::tokenizer<boost::char_separator<char> > tok(args_str, sep);
-  std::vector<std::string> args(tok.begin(), tok.end());
+  std::vector<std::string> args = string_tokenize(args_str, ' ');
 
   int num_required = 0;
   int num_optional = 0;
