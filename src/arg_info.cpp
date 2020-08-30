@@ -16,6 +16,7 @@
 
 #include <uitest/arg_info.hpp>
 
+#include <stdexcept>
 
 namespace uitesting {
 
