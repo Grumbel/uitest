@@ -66,15 +66,9 @@ if(BUILD_EXAMPLES)
 endif()
 
 if(BUILD_TESTS)
-  # build gtest
-  add_library(gtest STATIC external/googletest/src/gtest-all.cc)
-  target_include_directories(gtest SYSTEM PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external/googletest)
-  target_include_directories(gtest SYSTEM PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external/googletest/include)
-  set_target_properties(gtest PROPERTIES CXX_CLANG_TIDY "")
-
-  add_library(gtest_main STATIC external/googletest/src/gtest_main.cc)
-  target_include_directories(gtest_main SYSTEM PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external/googletest/include)
-  set_target_properties(gtest_main PROPERTIES CXX_CLANG_TIDY "")
+  if(NOT TARGET gtest)
+    add_subdirectory(external/googletest/ EXCLUDE_FROM_ALL)
+  endif()
 
   # build tests
   add_executable(test_uitest test/arg_info_test.cpp)
