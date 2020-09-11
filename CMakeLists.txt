@@ -48,9 +48,7 @@ if(BUILD_EXAMPLES)
 endif()
 
 if(BUILD_TESTS)
-  if(NOT TARGET gtest)
-    add_subdirectory(external/googletest/ EXCLUDE_FROM_ALL)
-  endif()
+  find_package(GTest REQUIRED)
 
   # build tests
   add_executable(test_uitest test/arg_info_test.cpp)
@@ -60,7 +58,7 @@ if(BUILD_TESTS)
     PROPERTY CXX_EXTENSIONS OFF)
   target_compile_options(test_uitest PRIVATE ${WARNINGS_CXX_FLAGS})
   target_include_directories(test_uitest PUBLIC include/)
-  target_link_libraries(test_uitest PUBLIC uitest gtest gtest_main)
+  target_link_libraries(test_uitest PUBLIC uitest GTest::GTest GTest::Main)
 
   # add 'make test' target, use 'make test ARGS="-V"' or 'ctest -V' for verbose
   enable_testing()
