@@ -33,23 +33,7 @@ target_include_directories(uitest PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 add_library(uitest_main STATIC src/uitest_main.cpp)
 target_compile_options(uitest_main PRIVATE ${WARNINGS_CXX_FLAGS})
 target_include_directories(uitest_main PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-
-if(CMAKE_VERSION VERSION_GREATER 3.6)
-  if (USE_CLANG_TIDY)
-    find_program(
-      CLANG_TIDY_EXE
-      NAMES "clang-tidy"
-      DOC "Path to clang-tidy executable"
-      )
-
-    if(NOT CLANG_TIDY_EXE)
-      message(FATAL_ERROR "clang-tidy not found.")
-    else()
-      message(STATUS "clang-tidy found: ${CLANG_TIDY_EXE}")
-      set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXE}")
-    endif()
-  endif()
-endif()
+set_property(TARGET uitest_main
 
 # build examples
 if(BUILD_EXAMPLES)
