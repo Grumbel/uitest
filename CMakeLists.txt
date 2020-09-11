@@ -19,7 +19,6 @@ project(uitest)
 
 find_package(Threads)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y")
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/external/cmake-modules/)
 
 include(ClangTidy)
@@ -27,13 +26,20 @@ include(MaximumWarnings)
 
 # build uitest
 add_library(uitest STATIC src/arg_info.cpp src/uitest.cpp)
+set_property(TARGET uitest
+  PROPERTY CXX_STANDARD 17
+  PROPERTY CXX_STANDARD_REQUIRED ON
+  PROPERTY CXX_EXTENSIONS OFF)
 target_compile_options(uitest PRIVATE ${WARNINGS_CXX_FLAGS})
 target_include_directories(uitest PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 add_library(uitest_main STATIC src/uitest_main.cpp)
+set_property(TARGET uitest_main
+    PROPERTY CXX_STANDARD 17
+    PROPERTY CXX_STANDARD_REQUIRED ON
+    PROPERTY CXX_EXTENSIONS OFF)
 target_compile_options(uitest_main PRIVATE ${WARNINGS_CXX_FLAGS})
 target_include_directories(uitest_main PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-set_property(TARGET uitest_main
 
 # build examples
 if(BUILD_EXAMPLES)
@@ -50,6 +56,10 @@ if(BUILD_TESTS)
 
   # build tests
   add_executable(test_uitest test/arg_info_test.cpp)
+  set_property(TARGET test_uitest
+    PROPERTY CXX_STANDARD 17
+    PROPERTY CXX_STANDARD_REQUIRED ON
+    PROPERTY CXX_EXTENSIONS OFF)
   target_compile_options(test_uitest PRIVATE ${WARNINGS_CXX_FLAGS})
   target_include_directories(test_uitest PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
   target_link_libraries(test_uitest LINK_PUBLIC uitest gtest gtest_main ${CMAKE_THREAD_LIBS_INIT})
