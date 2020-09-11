@@ -17,8 +17,6 @@
 cmake_minimum_required(VERSION 3.0)
 project(uitest)
 
-find_package(Threads)
-
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/external/cmake-modules/)
 
 include(ClangTidy)
@@ -61,8 +59,8 @@ if(BUILD_TESTS)
     PROPERTY CXX_STANDARD_REQUIRED ON
     PROPERTY CXX_EXTENSIONS OFF)
   target_compile_options(test_uitest PRIVATE ${WARNINGS_CXX_FLAGS})
-  target_include_directories(test_uitest PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-  target_link_libraries(test_uitest LINK_PUBLIC uitest gtest gtest_main ${CMAKE_THREAD_LIBS_INIT})
+  target_include_directories(test_uitest PUBLIC include/)
+  target_link_libraries(test_uitest PUBLIC uitest gtest gtest_main)
 
   # add 'make test' target, use 'make test ARGS="-V"' or 'ctest -V' for verbose
   enable_testing()
