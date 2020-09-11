@@ -60,9 +60,9 @@ std::vector<std::string> string_tokenize(std::string const& text, char delimiter
 
   for(std::string::size_type i = 0; i != text.size();)
   {
-    while(text[i] == delimiter && i != text.size()) { ++i; };
+    while(text[i] == delimiter && i != text.size()) { ++i; }
     const std::string::size_type start = i;
-    while(text[i] != delimiter && i != text.size()) { ++i; };
+    while(text[i] != delimiter && i != text.size()) { ++i; }
     const std::string::size_type end = i;
     if (start != end) {
       result.emplace_back(text.substr(start, end - start));
@@ -162,14 +162,8 @@ ArgInfo::parse_args(const std::vector<std::string>& raw_args,
       {
         rest_out.push_back(raw_args[i]);
       }
-      if (rest_out.empty())
-      {
-        return false;
-      }
-      else
-      {
-        return true;
-      }
+
+      return !rest_out.empty();
     }
     else // (m_rest == 0)
     {

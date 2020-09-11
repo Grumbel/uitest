@@ -25,7 +25,7 @@ namespace uitesting {
 class ArgInfo
 {
 public:
-  static ArgInfo from_string(const std::string& text);
+  static ArgInfo from_string(const std::string& args_str);
 
 public:
   ArgInfo(const std::string& args_str, int num_required, int num_optional, int rest);
