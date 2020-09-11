@@ -22,16 +22,8 @@ find_package(Threads)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y")
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/external/cmake-modules/)
 
-
-if(WARNINGS)
-  set(WARNINGS_CXX_FLAGS ${WARNINGS_CXX_FLAGS}
-    -pedantic -Wall -Wextra -Wno-c++0x-compat -Wnon-virtual-dtor -Weffc++
-    -Wconversion -Wshadow -Wcast-qual -Winit-self -Wno-unused-parameter -Wunreachable-code -Wno-sign-conversion)
-endif()
-
-if(WERROR)
-  set(WARNINGS_CXX_FLAGS ${WARNINGS_CXX_FLAGS} -Werror)
-endif()
+include(ClangTidy)
+include(MaximumWarnings)
 
 # build uitest
 add_library(uitest STATIC src/arg_info.cpp src/uitest.cpp)
