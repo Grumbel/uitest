@@ -17,19 +17,27 @@
 cmake_minimum_required(VERSION 3.0)
 project(uitest)
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/external/cmake-modules/)
+set(TINYCMMC_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/external/cmake-modules/modules/")
+find_package(tinycmmc CONFIG)
+message(STATUS "tinycmmc module path: ${TINYCMMC_MODULE_PATH}")
+list(APPEND CMAKE_MODULE_PATH ${TINYCMMC_MODULE_PATH})
 
+include(GNUInstallDirs)
 include(ClangTidy)
 include(MaximumWarnings)
 
 # build uitest
 add_library(uitest STATIC src/arg_info.cpp src/uitest.cpp)
+set_target_properties(uitest PROPERTIES PUBLIC_HEADER
+  "include/uitest/arg_info.hpp;include/uitest/uitest.hpp")
 set_property(TARGET uitest
   PROPERTY CXX_STANDARD 17
   PROPERTY CXX_STANDARD_REQUIRED ON
   PROPERTY CXX_EXTENSIONS OFF)
 target_compile_options(uitest PRIVATE ${WARNINGS_CXX_FLAGS})
-target_include_directories(uitest PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(uitest PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include/uitest>)
 
 add_library(uitest_main STATIC src/uitest_main.cpp)
 set_property(TARGET uitest_main
@@ -37,7 +45,27 @@ set_property(TARGET uitest_main
     PROPERTY CXX_STANDARD_REQUIRED ON
     PROPERTY CXX_EXTENSIONS OFF)
 target_compile_options(uitest_main PRIVATE ${WARNINGS_CXX_FLAGS})
-target_include_directories(uitest_main PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(uitest_main SYSTEM PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include/uitest>)
+
+install(TARGETS uitest_main uitest
+  EXPORT uitest-targets
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/uitest)
+
+# CMake integration
+configure_file(uitest-config.cmake.in
+  "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/uitest-config.cmake" @ONLY)
+install(FILES
+  "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/uitest-config.cmake"
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/uitest/")
+export(TARGETS uitest
+  FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/uitest-targets.cmake")
+export(PACKAGE uitest)
+install(EXPORT uitest-targets
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/uitest/")
 
 # build examples
 if(BUILD_EXAMPLES)
