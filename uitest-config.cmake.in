@@ -1,9 +1,8 @@
-get_filename_component(UITEST_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+@PACKAGE_INIT@
 
-include(CMakeFindDependencyMacro)
+include("${CMAKE_CURRENT_LIST_DIR}/uitest-config-version.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/uitest-targets.cmake")
 
-if(NOT TARGET uitest)
-  include("${UITEST_CMAKE_DIR}/uitest-targets.cmake")
-endif()
+check_required_components(uitest)
 
 # EOF #

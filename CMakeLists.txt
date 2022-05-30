@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 cmake_minimum_required(VERSION 3.0)
-project(uitest)
+project(uitest VERSION 0.0.0)
 
 set(TINYCMMC_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/external/cmake-modules/modules/")
 find_package(tinycmmc CONFIG)
@@ -49,24 +49,6 @@ target_include_directories(uitest_main SYSTEM PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include/uitest>)
 
-install(TARGETS uitest_main uitest
-  EXPORT uitest-targets
-  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/uitest)
-
-# CMake integration
-configure_file(uitest-config.cmake.in
-  "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/uitest-config.cmake" @ONLY)
-install(FILES
-  "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/uitest-config.cmake"
-  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/uitest/")
-export(TARGETS uitest
-  FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/uitest-targets.cmake")
-export(PACKAGE uitest)
-install(EXPORT uitest-targets
-  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/uitest/")
-
 # build examples
 if(BUILD_EXAMPLES)
   add_executable(example_test examples/examples.cpp)
@@ -95,4 +77,54 @@ if(BUILD_TESTS)
     COMMAND test_uitest)
 endif()
 
+# # Installation
+# install(TARGETS uitest_main uitest
+#   EXPORT uitest-targets
+#   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+#   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+#   PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/uitest)
+
+# # CMake integration
+# add_library(uitest::uitest ALIAS uitest)
+# add_library(uitest:uitest_main ALIAS uitest_main)
+
+# configure_file(uitest-config.cmake.in
+#   "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/uitest-config.cmake" @ONLY)
+# install(FILES
+#   "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/uitest-config.cmake"
+#   DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/uitest/")
+# export(TARGETS uitest uitest_main
+#   FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/uitest-targets.cmake")
+# export(PACKAGE uitest)
+# install(EXPORT uitest-targets
+#   DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/uitest/")
+
+install(TARGETS uitest uitest_main
+  EXPORT uitest
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}")
+
+add_library(uitest::uitest ALIAS uitest)
+add_library(uitest:uitest_main ALIAS uitest_main)
+
+include(CMakePackageConfigHelpers)
+configure_package_config_file("${PROJECT_NAME}-config.cmake.in" "${PROJECT_NAME}-config.cmake"
+  INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME}")
+write_basic_package_version_file("${PROJECT_NAME}-config-version.cmake"
+  VERSION "${PROJECT_VERSION}"
+  COMPATIBILITY SameMinorVersion)
+export(EXPORT "${PROJECT_NAME}"
+  NAMESPACE "${PROJECT_NAME}::"
+  FILE "${PROJECT_NAME}-targets.cmake")
+install(EXPORT "${PROJECT_NAME}"
+  FILE "${PROJECT_NAME}-targets.cmake"
+  NAMESPACE "${PROJECT_NAME}::"
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}")
+install(FILES
+  "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake"
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}")
+
 # EOF #
+
