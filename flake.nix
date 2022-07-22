@@ -14,8 +14,8 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
-      in rec {
-        packages = flake-utils.lib.flattenTree {
+      in {
+        packages = flake-utils.lib.flattenTree rec {
           uitest = pkgs.stdenv.mkDerivation {
             pname = "uitest";
             version = "0.0.0";
@@ -24,10 +24,11 @@
               pkgs.cmake
             ];
             buildInputs = [
-              tinycmmc.defaultPackage.${system}
+              tinycmmc.packages.${system}.default
             ];
-           };
+          };
+          default = uitest;
         };
-        defaultPackage = packages.uitest;
-      });
+      }
+    );
 }
