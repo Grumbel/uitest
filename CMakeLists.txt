@@ -17,14 +17,7 @@
 cmake_minimum_required(VERSION 3.0)
 project(uitest VERSION 0.0.0)
 
-set(TINYCMMC_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/external/cmake-modules/modules/")
-find_package(tinycmmc CONFIG)
-message(STATUS "tinycmmc module path: ${TINYCMMC_MODULE_PATH}")
-list(APPEND CMAKE_MODULE_PATH ${TINYCMMC_MODULE_PATH})
-
-include(GNUInstallDirs)
-include(ClangTidy)
-include(MaximumWarnings)
+include(mk/cmake/TinyCMMC.cmake)
 
 # build uitest
 add_library(uitest STATIC src/arg_info.cpp src/uitest.cpp)
