@@ -11,23 +11,13 @@
   };
 
   outputs = { self, nixpkgs, flake-utils, tinycmmc }:
-    flake-utils.lib.eachDefaultSystem (system:
-      let
-        pkgs = nixpkgs.legacyPackages.${system};
-      in {
-        packages = flake-utils.lib.flattenTree rec {
-          uitest = pkgs.stdenv.mkDerivation {
-            pname = "uitest";
-            version = "0.0.0";
-            src = nixpkgs.lib.cleanSource ./.;
-            nativeBuildInputs = [
-              pkgs.cmake
-            ];
-            buildInputs = [
-              tinycmmc.packages.${system}.default
-            ];
-          };
+    tinycmmc.lib.eachSystemWithPkgs (pkgs:
+      {
+        packages = rec {
           default = uitest;
+          uitest = pkgs.callPackage ./uitest.nix {
+            tinycmmc = tinycmmc.packages.${pkgs.targetPlatform.system}.default;
+          };
         };
       }
     );
