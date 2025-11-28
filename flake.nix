@@ -16,7 +16,7 @@
         packages = rec {
           default = uitest;
           uitest = pkgs.callPackage ./uitest.nix {
-            tinycmmc = tinycmmc.packages.${pkgs.targetPlatform.system}.default;
+            tinycmmc = tinycmmc.packages.${pkgs.stdenv.hostPlatform.system}.default;
           };
         };
       }
